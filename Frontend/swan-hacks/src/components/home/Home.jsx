@@ -1,12 +1,11 @@
-// import React, { useState, useEffect } from 'react';
-// import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-// const Home = ({}) => {
+const Home = ({}) => {
 
+    return(
+        <p>hello world</p>
+    );
+};
 
-//     return(
-        
-//     );
-// };
-
-// export default Home;
+export default Home;
