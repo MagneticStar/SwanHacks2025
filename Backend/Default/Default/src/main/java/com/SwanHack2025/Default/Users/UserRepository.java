@@ -1,4 +1,4 @@
-package com.SwanHack2025.Default;
+package com.SwanHack2025.Default.Users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

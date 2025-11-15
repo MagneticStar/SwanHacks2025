@@ -1,4 +1,4 @@
-package com.SwanHack2025.Default;
+package com.SwanHack2025.Default.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("api/users")
 public class UserController {
 
     @Autowired

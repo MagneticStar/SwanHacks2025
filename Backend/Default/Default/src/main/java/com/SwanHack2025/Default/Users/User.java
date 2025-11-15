@@ -1,4 +1,4 @@
-package com.SwanHack2025.Default;
+package com.SwanHack2025.Default.Users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
