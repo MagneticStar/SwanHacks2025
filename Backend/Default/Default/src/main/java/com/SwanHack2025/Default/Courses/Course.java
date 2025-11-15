@@ -17,19 +17,21 @@ public class Course {
     @Column(length = 1000)
     private String description;
 
+
     @ElementCollection
     @CollectionTable(name = "course_image_urls", joinColumns = @JoinColumn(name = "course_id"))
     @Column(name = "image_url")
-    private List<String> imageUrls = new ArrayList<>();
+    private String previewImageUrl = new ArrayList<>();
 
     // Constructors
     public Course() {
     }
 
-    public Course(String name, String description, List<String> imageUrls) {
+    public Course(String name, String description, String previewImageUrl) {
         this.name = name;
         this.description = description;
-        this.imageUrls = imageUrls;
+
+        this.previewImageUrl = previewImageUrl;
     }
 
     // Getters and Setters
@@ -57,19 +59,11 @@ public class Course {
         this.description = description;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
+    public String getPreviewImageUrl() {
+        return previewImageUrl;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
-    public void addImageUrl(String imageUrl) {
-        this.imageUrls.add(imageUrl);
-    }
-
-    public void removeImageUrl(String imageUrl) {
-        this.imageUrls.remove(imageUrl);
+    public void setPreviewImageUrl(String previewImageUrl) {
+        this.previewImageUrl = previewImageUrl;
     }
 }

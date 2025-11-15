@@ -74,7 +74,7 @@ public class CourseController {
             Course existingCourse = courseData.get();
             existingCourse.setName(course.getName());
             existingCourse.setDescription(course.getDescription());
-            existingCourse.setImageUrls(course.getImageUrls());
+            existingCourse.setPreviewImageUrl(course.getPreviewImageUrl());
 
             courseRepo.save(existingCourse);
             return new ResponseEntity<>(existingCourse, HttpStatus.OK);
