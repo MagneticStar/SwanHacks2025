@@ -1,14 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useState } from 'react'
 import './App.css'
 
-import 
+import UserSignup from './components/user/UserSignup';
 
-
-
-
-/**
- * This is the main screen that will always be showing (this will show different objects)
- */
 function App() {
 
   const [user, setUser] = useState({
@@ -16,19 +11,17 @@ function App() {
     name: '',
     email: '',
     elo: ''
-
   });
 
-  <Router>
-    <div className="flex-grow">
-      <Routes>
-        // <Route path="/authors" element={<AboutUs />} />
-
-
-      </Routes>
-    </div>
-  </Router>
+  return (
+    <Router>
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/signup" element={<UserSignup user={user} setUser={setUser} />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
-
 
 export default App;
