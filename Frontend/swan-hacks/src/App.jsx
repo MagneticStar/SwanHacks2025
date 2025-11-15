@@ -3,6 +3,7 @@ import { useState } from 'react'
 import './App.css'
 
 import UserSignup from './components/user/UserSignup';
+import UserLogin from './components/user/UserLogin';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       <div className="flex-grow">
         <Routes>
           <Route path="/signup" element={<UserSignup user={user} setUser={setUser} />} />
+          <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
         </Routes>
       </div>
     </Router>
