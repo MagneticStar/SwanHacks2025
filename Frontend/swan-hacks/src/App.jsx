@@ -20,6 +20,7 @@ function App() {
       <div className="flex-grow">
         <Routes>
           <Route path="/signup" element={<UserSignup user={user} setUser={setUser} />} />
+          <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
           <Route path="/" element={<Home/>} />       
         </Routes>
       </div>
