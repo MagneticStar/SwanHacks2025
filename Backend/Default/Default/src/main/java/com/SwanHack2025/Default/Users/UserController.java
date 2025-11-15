@@ -85,7 +85,7 @@ public class UserController {
             User existingUser = userData.get();
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(user.getPassword());
-            existingUser.setEloRanking(user.getEloRanking());
+            existingUser.setElo(user.getElo());
 
             return new ResponseEntity<>(userRepo.save(existingUser), HttpStatus.OK);
         } else {
