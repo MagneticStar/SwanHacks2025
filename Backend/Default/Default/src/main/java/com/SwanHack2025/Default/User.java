@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.SwanHack2025.Default;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,15 +16,17 @@ public class User {
 
     private String username;
     private String password;
+    private String email;
     private Integer eloRanking;
 
     // Constructors
     public User() {
     }
 
-    public User(String username, String password, Integer eloRanking) {
+    public User(String username, String password,String email, Integer eloRanking) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.eloRanking = eloRanking;
     }
 
@@ -52,6 +54,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getEmail() {return email;}
+
+    public void setEmail(String email) {this.email = email;}
 
     public Integer getEloRanking() {
         return eloRanking;
