@@ -18,10 +18,7 @@ public class Course {
     private String description;
 
 
-    @ElementCollection
-    @CollectionTable(name = "course_image_urls", joinColumns = @JoinColumn(name = "course_id"))
-    @Column(name = "image_url")
-    private String previewImageUrl = new ArrayList<>();
+    private String previewImageUrl;
 
     // Constructors
     public Course() {
