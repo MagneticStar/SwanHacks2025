@@ -2,6 +2,7 @@ package com.SwanHack2025.Default.Courses;
 
 import jakarta.persistence.*;
 import com.SwanHack2025.Default.Images.Image;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,8 @@ public class Course {
 
     private String previewImageUrl;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Image> images = new ArrayList<>();
 
     // Constructors

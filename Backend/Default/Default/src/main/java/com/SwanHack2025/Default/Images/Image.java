@@ -2,6 +2,7 @@ package com.SwanHack2025.Default.Images;
 
 import jakarta.persistence.*;
 import com.SwanHack2025.Default.Courses.Course;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "images")
@@ -19,6 +20,7 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
 
     // Constructors
