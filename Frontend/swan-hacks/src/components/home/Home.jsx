@@ -74,12 +74,6 @@ const Home = ({userInfo}) => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#A3B087] border-t-2 border-[#FFF8D4] z-50">
-        <div className="px-5 py-2.5 flex items-center justify-between">
-          {/* empty content */}
-        </div>
-      </div>
     </div>
   );
 };
