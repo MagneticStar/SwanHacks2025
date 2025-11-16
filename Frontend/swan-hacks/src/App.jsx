@@ -11,10 +11,10 @@ import Home from './components/home/Home';
 function App() {
 
   const [user, setUser] = useState({
-    id: '1',
-    name: '1',
-    email: '1',
-    elo: '1'
+    id: '',
+    name: '',
+    email: '',
+    elo: ''
   });
 
   const [course, setCourse] = useState({
@@ -28,14 +28,23 @@ function App() {
 
   return (
     <Router>
-      <div className="flex-grow">
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        width: "100vw"
+      }}>
         <Routes>
-          <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
-          <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
+          <Route path="/" element={<Home userInfo={user}/>} />       
+
+          {/* User */}
           <Route path="/user-info" element={<UserInfo userInfo={user} />} />
+          <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
+          <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
 
-          <Route path="/" element={<Home/>} />       
+          {/* Course */}
+          {/* Fill in here!!! */}
         </Routes>
       </div>
     </Router>
