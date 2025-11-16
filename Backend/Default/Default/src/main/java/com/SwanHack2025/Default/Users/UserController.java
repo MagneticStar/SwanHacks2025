@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.SwanHack2025.Default.Helpers.UserHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,23 +27,12 @@ public class UserController {
         }
     }
 
-    // READ - Get all users
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        try {
-            List<User> users = userRepo.findAll();
-            if (users.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
-    // READ - Get user by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+    // READ - Get current user info
+    @GetMapping
+    public ResponseEntity<User> getUserById(@RequestHeader("Authorization") String authHeader) {
+        User user = UserHelper.getCurrentUser(authHeader);
+        Long id = user.getId();
         Optional<User> userData = userRepo.findById(id);
 
         if (userData.isPresent()) {
@@ -77,8 +67,10 @@ public class UserController {
     }
 
     // UPDATE - Update user by ID
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String authHeader, @RequestBody User user) {
+        User reqUser = UserHelper.getCurrentUser(authHeader);
+        Long id = reqUser.getId();
         Optional<User> userData = userRepo.findById(id);
 
         if (userData.isPresent()) {
@@ -93,22 +85,13 @@ public class UserController {
         }
     }
 
-    // DELETE - Delete user by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
+    // DELETE - Delete current users account
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deleteUser(@RequestHeader("Authorization") String authHeader) {
+        User reqUser = UserHelper.getCurrentUser(authHeader);
+        Long id = reqUser.getId();
         try {
             userRepo.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    // DELETE - Delete all users
-    @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteAllUsers() {
-        try {
-            userRepo.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
