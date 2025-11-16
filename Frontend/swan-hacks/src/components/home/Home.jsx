@@ -1,32 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+const courses = [
+    {
+        id: 1,
+        title: "React for Beginners",
+        description: "Learn the basics of React.",
+        image: "/imgs/react.svg",
+    },
+    {
+        id: 2,
+        title: "Spring Boot Fundamentals",
+        description: "Introduction to Spring Boot and REST APIs.",
+        image: "/imgs/vite.svg",
+    },
+    {
+        id: 1,
+        title: "React for Beginners",
+        description: "Learn the basics of React.",
+        image: "/imgs/react.svg",
+    },
+    {
+        id: 2,
+        title: "Spring Boot Fundamentals",
+        description: "Introduction to Spring Boot and REST APIs.",
+        image: "/imgs/vite.svg",
+    }
+];
 
 const Home = ({ }) => {
 
     return (
-        <div style={{ // top level column
-            display: "flex",
-            flexDirection: "column",
-            height: "100vh",
-        }}>
-            <div style={{ // top bar background
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                backgroundColor: "#1e1e1e",
-                borderBottom: "2px solid #333",
-                color: "white",
-                zIndex: 1000,
-            }}>
-                <div style={{ // top bar content
-                        maxWidth: "1200px",
-                        margin: "0 auto",  
-                        padding: "10px 20px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                }}>
+        <div className="flex flex-col h-screen">
+            <div className="fixed top-0 left-0 w-full bg-[#6B4226] border-b-2 border-gray-800 text-white z-50">
+                <div className="max-w-[1200px] mx-auto px-5 py-2.5 flex items-center justify-between">
                     <div>
                         <p>dropdown</p>
                     </div>
@@ -35,37 +42,43 @@ const Home = ({ }) => {
                     </div>
                     <div>
                         <Link to="/login">
-                        <p>user/login</p>
+                            <p>user/login</p>
                         </Link>
                     </div>
                 </div>
             </div>
 
-            <div style={{ height: "60px" }} /* spacer to prevent content from being hidden under fixed top bar*/ /> 
+            <div className="flex-1 overflow-y-auto mt-[60px] px-5 py-5">
+                <div className="mb-4">
+                    <h2 className="text-xl font-bold text-gray-800 mb-1">Courses</h2>
+                    <div className="border-t border-gray-300"></div>
+                </div>
 
-            <div style={{ // course content scroll area
-                    flex: 1,
-                    overflowY: "auto",
-                    maxWidth: "1200px",
-                    margin: "0 auto",
-                    padding: "20px",
-            }}>
-                <p>courses scroll area</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {courses.map(course => (
+                        <Link
+                            key={course.id}
+                            to={`/courses/${course.id}`}
+                            className="h-[320px] rounded-lg shadow-md overflow-hidden relative cursor-pointer block"
+                        >
+                            <div
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{ backgroundImage: `url(${course.image})` }}
+                            />
+                            <div className="absolute bottom-0 w-full bg-white/70 backdrop-blur-sm p-4 rounded-b-lg">
+                                <p className="font-bold text-lg text-gray-800 truncate m-0">{course.title}</p>
+                                <p className="text-sm text-gray-500 mt-1 line-clamp-2">{course.description}</p>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
 
-            <div style={{ height: "60px" }} /* spacer to prevent content from being hidden under fixed bottom bar*/ /> 
 
-            <div style={{ // footer background for endless mode
-                position: "fixed",
-                bottom: 0,
-                left: 0,
-                width: "100%",
-                backgroundColor: "#1e1e1e",
-                borderBottom: "2px solid #333",
-                color: "white",
-                zIndex: 1000,
-            }}>
-                <p>endless mode</p>
+            <div className="fixed bottom-0 left-0 w-full bg-[#6B4226] border-t-2 border-gray-800 text-white z-50">
+                <div className="px-5 py-2.5 flex items-center justify-between">
+                    {/* empty content */}
+                </div>
             </div>
         </div>
     );
