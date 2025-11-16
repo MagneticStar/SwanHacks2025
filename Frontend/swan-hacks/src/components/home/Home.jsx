@@ -28,8 +28,9 @@ const courses = [
     }
 ];
 
-const Home = (userInfo) => {
-  return (
+
+const Home = ({userInfo}) => {
+    return (
     <div className="flex flex-col h-screen">
       {/* Header */}
       <div className="fixed top-0 left-0 w-full bg-[#A3B087] border-b-2 border-[#FFF8D4] z-50">
@@ -37,7 +38,7 @@ const Home = (userInfo) => {
           <div>dropdown</div>
             <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
                 <div>
-                {userInfo?.name != '' ? (
+                {userInfo && userInfo.name ? (
                     <Link to="/user-info">
                     <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
                     </Link>
