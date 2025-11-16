@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function UserSignup({ user, setUser }) {
   const [answers, setAnswers] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: ""
@@ -11,30 +11,52 @@ export default function UserSignup({ user, setUser }) {
   const [error, setError] = useState("");
 
   function handleChange(e) {
-    setAnswers({ 
-      ...answers, 
-      [e.target.name]: e.target.value 
+    setAnswers({
+      ...answers,
+      [e.target.name]: e.target.value
     });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setError("");
 
     if (answers.password !== answers.confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    // Simulate server response
-    const serverResponse = {
-      id: crypto.randomUUID(),
-      name: answers.name,
-      email: answers.email,
-      elo: "1200"  // server-calculated
-    };
+    try {
+      const response = await fetch("http://localhost:8080/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: answers.username,
+          password: answers.password,
+          email: answers.email
+        })
+      });
 
-    setUser(serverResponse);
-    setError("");
+      if (!response.ok) {
+        throw new Error("Signup failed");
+      }
+
+      const data = await response.json();
+
+      // Expected response example:
+      // { id: 1, username: "...", email: "...", elo: 1200 }
+
+      setUser({
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        elo: data.elo
+      });
+
+    } catch (err) {
+      console.error(err);
+      setError("Unable to create account. Try again.");
+    }
   }
 
   return (
@@ -45,11 +67,11 @@ export default function UserSignup({ user, setUser }) {
       <form onSubmit={handleSubmit}>
 
         <label>
-          What is your full name?
-          <input 
+          Choose a username:
+          <input
             type="text"
-            name="name"
-            value={answers.name}
+            name="username"
+            value={answers.username}
             onChange={handleChange}
             required
           />
@@ -57,7 +79,7 @@ export default function UserSignup({ user, setUser }) {
 
         <label>
           What email do you want to use?
-          <input 
+          <input
             type="email"
             name="email"
             value={answers.email}
@@ -68,7 +90,7 @@ export default function UserSignup({ user, setUser }) {
 
         <label>
           Choose a password:
-          <input 
+          <input
             type="password"
             name="password"
             value={answers.password}
@@ -79,7 +101,7 @@ export default function UserSignup({ user, setUser }) {
 
         <label>
           Re-enter your password:
-          <input 
+          <input
             type="password"
             name="confirmPassword"
             value={answers.confirmPassword}
@@ -88,7 +110,7 @@ export default function UserSignup({ user, setUser }) {
           />
         </label>
 
-        <button type="submit" onClick={console.log(answers)}>Create Account</button>
+        <button type="submit">Create Account</button>
 
       </form>
 

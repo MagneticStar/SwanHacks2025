@@ -21,14 +21,16 @@ function App() {
     id: '',
     name: '',
     preview: '',
-    description: ''
+    description: '',
+    timeTaken: '',
+    percentScore: ''
   })
 
   return (
     <Router>
       <div className="flex-grow">
         <Routes>
-          <Route path="/signup" element={<UserSignup user={user} setUser={setUser} />} />
+          <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
           <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
           <Route path="/user-info" element={<UserInfo userInfo={user} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
