@@ -12,10 +12,13 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String path;
 
-    private Integer imgElo;
+    @Column(nullable = false)
+    private Integer imgElo = 500;
 
+    @Column(nullable = false)
     private Boolean isAi;
 
     @ManyToOne
@@ -26,9 +29,9 @@ public class Image {
     // Constructors
     public Image() {}
 
-    public Image(String path, Integer imgElo) {
+    public Image(String path) {
         this.path = path;
-        this.imgElo = imgElo;
+        imgElo = 500;
     }
 
     // Getters and Setters

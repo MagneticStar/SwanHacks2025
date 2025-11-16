@@ -106,19 +106,29 @@ public class ImageController {
             Image image = imageRepo.findById(request.getImageId())
                     .orElseThrow(() -> new RuntimeException("Image not found"));
 
-            boolean correct = image.getIsAi() == request.isGuessedAI();
+            double actualScoreUser = (image.getIsAi() == request.isGuessedAI()) ? 1.0 : 0.0;
+            double actualScoreImage = 1.0 - actualScoreUser; // opposite of user
 
-            int changeAmount = 10;
-            if (correct) {
-                user.setElo(user.getElo() + changeAmount);
-                image.setImgElo(image.getImgElo() - changeAmount);
-            } else {
-                user.setElo(user.getElo() - changeAmount);
-                image.setImgElo(image.getImgElo() + changeAmount);
-            }
+            // Get current ratings
+            double ratingUser = user.getElo();
+            double ratingImage = image.getImgElo();
+
+            double expectedUser = 1.0 / (1.0 + Math.pow(10, (ratingImage - ratingUser) / 400.0));
+            double expectedImage = 1.0 / (1.0 + Math.pow(10, (ratingUser - ratingImage) / 400.0));
+
+            //K val of 40 is good for calibration, K val of 32 is good after that
+            int K = 30;
+
+            int newUserElo = (int) Math.round(ratingUser + K * (actualScoreUser - expectedUser));
+            int newImageElo = (int) Math.round(ratingImage + K * (actualScoreImage - expectedImage));
+
+            user.setElo(newUserElo);
+            image.setImgElo(newImageElo);
 
             userRepo.save(user);
             imageRepo.save(image);
+
+            boolean correct = actualScoreUser == 1.0;
 
             return ResponseEntity.ok(new Object() {
                 public final boolean correctGuess = correct;
@@ -130,5 +140,6 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 
 }
