@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function DeleteUser({ userInfo, setUserInfo }) {
   const navigate = useNavigate();
@@ -7,10 +7,10 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Redirect if user is not logged in
+  // Redirect if user is not logged in or name is empty
   useEffect(() => {
-    if (!userInfo || !userInfo.id) {
-      navigate("/login");
+    if (!userInfo || !userInfo.id || userInfo.name === "") {
+      navigate("/");
     }
   }, [userInfo, navigate]);
 
@@ -23,7 +23,6 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
     setError("");
     setSuccess("");
 
-    // Ensure input matches the logged-in user
     if (form.username !== userInfo.username) {
       setError("Username does not match logged-in user.");
       return;
@@ -41,8 +40,8 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
       }
 
       setSuccess("Account deleted successfully 🤰");
-      setUserInfo({ id: "", name: "", username: "", elo: "" }); // reset user state
-      setTimeout(() => navigate("/signup"), 1500); // redirect to signup after deletion
+      setUserInfo({ id: "", name: "", username: "", elo: "" });
+      setTimeout(() => navigate("/signup"), 1500);
 
     } catch (err) {
       console.error(err);
@@ -53,7 +52,9 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
   return (
     <div style={{ maxWidth: "400px", margin: "auto", padding: "1rem" }}>
       <h1>Delete Account</h1>
-      <p style={{ marginBottom: "1rem" }}>Enter your username and password to confirm account deletion.</p>
+      <p style={{ marginBottom: "1rem" }}>
+        Enter your username and password to confirm account deletion.
+      </p>
 
       <form onSubmit={handleDelete}>
         <input
@@ -77,6 +78,13 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
       {success && <p style={{ color: "green" }}>{success}</p>}
+
+      {/* Back button to /user-info */}
+      <div style={{ marginTop: "1rem" }}>
+        <Link to="/user-info">
+          <button>Back</button>
+        </Link>
+      </div>
     </div>
   );
 }

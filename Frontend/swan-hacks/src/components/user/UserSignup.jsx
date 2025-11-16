@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"; // only if using React Router
 
 export default function UserSignup({ user, setUser }) {
   const [answers, setAnswers] = useState({
@@ -43,9 +44,6 @@ export default function UserSignup({ user, setUser }) {
 
       const data = await response.json();
 
-      // Expected response example:
-      // { id: 1, username: "...", email: "...", elo: 1200 }
-
       setUser({
         id: data.id,
         username: data.username,
@@ -65,7 +63,6 @@ export default function UserSignup({ user, setUser }) {
       <h1 style={{ marginBottom: "1rem" }}>Create Your Account</h1>
 
       <form onSubmit={handleSubmit}>
-
         <label>
           Choose a username:
           <input
@@ -111,10 +108,14 @@ export default function UserSignup({ user, setUser }) {
         </label>
 
         <button type="submit">Create Account</button>
-
       </form>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {/* Link back to login */}
+      <div style={{ marginTop: "1rem" }}>
+        <Link to="/login">Back to Login</Link>
+      </div>
     </div>
   );
 }

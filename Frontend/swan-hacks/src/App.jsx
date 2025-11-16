@@ -11,10 +11,10 @@ import Home from './components/home/Home';
 function App() {
 
   const [user, setUser] = useState({
-    id: '0',
-    name: '0',
-    email: '0',
-    elo: '0'
+    id: '1',
+    name: '1',
+    email: '',
+    elo: ''
   });
 
   const [course, setCourse] = useState({
