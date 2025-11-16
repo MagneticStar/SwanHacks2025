@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "courses")
-public class Course {
+public class Course{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,6 @@ public class Course {
     public Course(String name, String description, String previewImageUrl) {
         this.name = name;
         this.description = description;
-
         this.previewImageUrl = previewImageUrl;
     }
 
