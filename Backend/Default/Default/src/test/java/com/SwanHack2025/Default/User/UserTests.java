@@ -14,7 +14,7 @@ class UserTests {
         assertNull(user.getUsername());
         assertNull(user.getPassword());
         assertNull(user.getEmail());
-        assertNull(user.getElo());
+        assertEquals(500,user.getElo());
     }
 
     @Test
