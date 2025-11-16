@@ -49,15 +49,18 @@ export default function UserSignup({ user, setUser }) {
 
       const data = await response.json();
 
-    // 1️⃣ Save user in state
+    // Save user in state
       setUser({
         id: data.id,
         name: data.username,
         email: data.email,
-        elo: data.elo
+        elo: data.elo,
+        token: data.token
       });
 
-      // 2️⃣ Navigate to user-info page
+      localStorage.setItem("authToken", data.token);
+
+      // Navigate to user-info page
       navigate("/user-info");
 
     } catch (err) {

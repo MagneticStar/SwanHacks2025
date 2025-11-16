@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import UserInfo from "./UserInfo";
 
-// http://localhost:8080/api/auth/login POST
-// Required to call
-// keys: username + password (this is setUserInfo.name and forget about the password)
-// returns: all keys + token
+// API: POST http://localhost:8080/api/auth/login
+// Request body: { username, password }
+// Response: { id, name, username, email, elo, token }
 
 export default function UserLogin({ setUserInfo }) {
   const [form, setForm] = useState({
@@ -13,6 +13,7 @@ export default function UserLogin({ setUserInfo }) {
   });
 
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   function handleChange(e) {
     setForm({
@@ -26,10 +27,13 @@ export default function UserLogin({ setUserInfo }) {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          username: form.username,
+          password: form.password,
+        }),
       });
 
       if (!res.ok) {
@@ -38,12 +42,19 @@ export default function UserLogin({ setUserInfo }) {
 
       const data = await res.json();
 
+      // Save user info and token
       setUserInfo({
         id: data.id,
         name: data.name,
-        username: data.username,
+        email: data.email,
         elo: data.elo,
+        token: data.token
       });
+
+      // Persist token
+    localStorage.setItem("authToken", data.token);
+    navigate('/');
+    
     } catch (err) {
       console.error(err);
       setError("Invalid username or password.");
