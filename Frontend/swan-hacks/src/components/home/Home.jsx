@@ -30,6 +30,9 @@ const courses = [
 
 
 const Home = ({userInfo}) => {
+
+  console.log(userInfo);
+
     return (
     <div className="flex flex-col h-screen">
       {/* Header */}

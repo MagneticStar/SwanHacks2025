@@ -69,33 +69,36 @@ public class UserController {
         }
     }
 
-    // Read - Get user by username and password
-    @GetMapping("/username/{username}/password/{password}")
-    public ResponseEntity<User> getUserByUsernameAndPassword(@PathVariable("username") String username,@PathVariable("password") String password){
-        Optional<User> userData = userRepo.findByUsername(username);
+    // Read - Get user by username and password using request body
+    @PostMapping("/login")  // POST is preferred for sending credentials
+    public ResponseEntity<User> getUserByUsernameAndPassword(@RequestBody User loginUser) {
+        Optional<User> userData = userRepo.findByUsername(loginUser.getUsername());
+
         if (userData.isPresent()) {
-            if(userData.get().getPassword().equals(password)) {
+            // Check password
+            if (userData.get().getPassword().equals(loginUser.getPassword())) {
                 return new ResponseEntity<>(userData.get(), HttpStatus.OK);
             } else {
                 System.out.println("Wrong password!!!");
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
-        } else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    // READ - Get user by email
-    @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
-        Optional<User> userData = userRepo.findByUsername(email);
-
-        if (userData.isPresent()) {
-            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+    // READ - Get user by email
+//    @GetMapping("/email/{email}")
+//    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
+//        Optional<User> userData = userRepo.findByUsername(email);
+//
+//        if (userData.isPresent()) {
+//            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     // UPDATE - Update user by ID
     @PutMapping("/{id}")
