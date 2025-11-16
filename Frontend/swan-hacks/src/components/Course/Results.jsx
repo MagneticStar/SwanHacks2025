@@ -1,73 +1,62 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function Results({ course, setCourse }) {
-  const navigate = useNavigate();
-
-  // Redirect if no results are present
-  if (!course || !course.percentScore) {
+export default function Results({ results }) {
+  if (!results || !results.correct || results.correct.length === 0) {
     return (
-      <div className="p-6 text-center">
-        <p>No course results found.</p>
-        <button
-          onClick={() => navigate("/courses")}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-        >
-          Go to Courses
-        </button>
+      <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10 bg-[#313647]">
+        <div className="w-full max-w-md bg-[#FFF8D4] rounded-lg shadow-lg p-6 text-center">
+          <p className="text-[#313647] mb-4">No course results found.</p>
+          <Link to="/courses">
+            <button className="bg-[#313647] text-[#FFF8D4] font-bold py-2 px-4 rounded hover:bg-[#222939] transition">
+              Go to Courses
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
-      <h1>Results for {course.name}</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10 bg-[#313647]">
+      <div className="w-full max-w-md bg-[#FFF8D4] rounded-lg shadow-lg p-6">
+        <h1 className="text-2xl font-bold text-[#313647] text-center mb-6">
+          Results
+        </h1>
 
-      <div style={{ marginTop: "2rem" }}>
-        <p style={{ fontSize: "1.2rem" }}>
-          <strong>Score: </strong> {course.percentScore}
-        </p>
+        {/* Elo change */}
+        <div className="flex justify-between items-center bg-[#A3B087] text-[#313647] rounded p-3 mb-4">
+          <span className="flex-1 text-left font-bold">ELO Change</span>
+          <span className="font-bold">{results.elodiff}</span>
+        </div>
 
-        <p style={{ fontSize: "1.2rem" }}>
-          <strong>Time Taken: </strong> {course.timeTaken}
-        </p>
-      </div>
+        {/* Correctness list */}
+        <div className="flex flex-col gap-3">
+          {results.correct.map((val, idx) => (
+            <div
+              key={idx}
+              className="flex justify-between items-center bg-[#A3B087] text-[#313647] rounded p-3"
+            >
+              <span className="font-bold w-8 text-center">{idx + 1}</span>
+              <span className="flex-1 text-left">Image {idx + 1}</span>
+              <span className="font-bold">{val || "No Answer"}</span>
+            </div>
+          ))}
+        </div>
 
-      <div style={{ marginTop: "3rem" }}>
-        <button
-          onClick={() => navigate("/courses")}
-          style={{
-            marginRight: "1rem",
-            padding: "0.7rem 1.4rem",
-            background: "#3498db",
-            color: "white",
-            borderRadius: "8px",
-            border: "none"
-          }}
-        >
-          Home
-        </button>
+        {/* Buttons */}
+        <div className="flex justify-center mt-6 gap-4">
+          <Link to="/courses">
+            <button className="bg-[#313647] text-[#FFF8D4] font-bold py-2 px-4 rounded hover:bg-[#222939] transition">
+              Try Again
+            </button>
+          </Link>
 
-        <button
-          onClick={() => {
-            // Clear results so user can retry
-            setCourse(prev => ({
-              ...prev,
-              timeTaken: null,
-              percentScore: null
-            }));
-
-            navigate("/courses");
-          }}
-          style={{
-            padding: "0.7rem 1.4rem",
-            background: "#2ecc71",
-            color: "white",
-            borderRadius: "8px",
-            border: "none"
-          }}
-        >
-          Try Again
-        </button>
+          <Link to="/">
+            <button className="bg-[#2ecc71] text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition">
+              Home
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );

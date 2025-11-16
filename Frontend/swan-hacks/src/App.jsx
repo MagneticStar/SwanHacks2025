@@ -9,6 +9,7 @@ import UserInfo from './components/user/UserInfo';
 import Home from './components/home/Home';
 import Course from './components/Course/Course';
 import Leaderboard from './components/leaderboard/leaderboard';
+import Results from './components/Course/Results'
 
 function App() {
   const [user, setUser] = useState({
@@ -24,6 +25,11 @@ function App() {
     name: '',
     preview: '',
     description: '',
+  });
+
+  const [results, setResults] = useState({
+    elodiff: '',
+    correct: ['','','','','',''],
   });
 
   useEffect(() => {
@@ -66,8 +72,8 @@ function App() {
           <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
           <Route path="/user-info" element={<UserInfo userInfo={user} setUserInfo={setUser} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
-          <Route path='/courses' element={<Course userInfo={user} course={course} setCourse={setCourse}/>} />
-          <Route path="/results" element={<Results userInfo={user} elo={} />} />
+          <Route path='/courses' element={<Course userInfo={user} course={course} setResults={setResults}/>} />
+          <Route path="/results" element={<Results userInfo={user} results={results} />} />
           <Route path='/leaderboard' element={<Leaderboard />} />
         </Routes>
       </div>
