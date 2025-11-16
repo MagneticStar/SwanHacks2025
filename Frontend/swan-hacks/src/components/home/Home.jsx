@@ -4,15 +4,9 @@ import { Link } from 'react-router-dom';
 const courses = [
     {
         id: 1,
-<<<<<<< HEAD
-        title: "Cars",
-        description: "Intersections, and vehicles",
-        image: "/assets/car1",
-=======
         title: "Art",
         description: "Learn the basics of React.",
         image: "/imgs/artpreview.jpg",
->>>>>>> eb83c6e7082ae11c373746f7a18b096df42b4c2f
     },
     {
         id: 2,
@@ -35,14 +29,7 @@ const courses = [
 ];
 
 
-<<<<<<< HEAD
-const Home = ({userInfo}) => {
-
-  console.log(userInfo);
-
-=======
 const Home = ({userInfo, setCourse}) => {
->>>>>>> eb83c6e7082ae11c373746f7a18b096df42b4c2f
     return (
     <div className="flex flex-col h-screen">
       {/* Header */}

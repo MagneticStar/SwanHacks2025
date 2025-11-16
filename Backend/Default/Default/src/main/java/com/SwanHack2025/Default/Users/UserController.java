@@ -8,6 +8,7 @@ import com.SwanHack2025.Default.Helpers.UserHelper;
 import com.SwanHack2025.Default.Auth.LoginResponse;
 import com.SwanHack2025.Default.Auth.JwtUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -83,6 +84,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    // Read - Get Elo and Usernames of top 10 users
+    @GetMapping("/leaderboard")
+    public ResponseEntity<List<User>> GetLeaderBoard() {
+        return ResponseEntity.ok(userRepo.findTop10ByOrderByEloDesc());
     }
 
     // Read - Get user by username and password using request body

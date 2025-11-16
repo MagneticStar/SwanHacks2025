@@ -43,7 +43,7 @@ function App() {
     .then(data => {
       setUser({
         id: data.id,
-        name: data.name,
+        name: data.username,
         email: data.email,
         elo: data.elo,
         token: token
