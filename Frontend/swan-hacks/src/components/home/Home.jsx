@@ -41,7 +41,7 @@ const Home = ({userInfo}) => {
           <div>dropdown</div>
             <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
                 <div>
-                {userInfo && userInfo.name ? (
+                {userInfo && userInfo.name !== '' ? (
                     <Link to="/user-info">
                     <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
                     </Link>

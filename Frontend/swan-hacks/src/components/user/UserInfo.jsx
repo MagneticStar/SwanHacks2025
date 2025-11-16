@@ -1,9 +1,25 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 
-export default function UserInfo({ userInfo }) {
+export default function UserInfo({ userInfo, setUserInfo }) {
   if (!userInfo || !userInfo.id) {
     return <Navigate to="/login" replace />;
+  }
+
+  const navigate = useNavigate();
+
+  function logOut() {
+    // Remove token from localStorage
+    localStorage.removeItem('authToken');
+    
+    // Reset user state
+    setUserInfo({
+      id: '',
+      name: '',
+      email: '',
+      elo: '',
+      token: ''
+    });
   }
 
   return (
@@ -27,6 +43,10 @@ export default function UserInfo({ userInfo }) {
               Delete Account
             </button>
           </Link>
+
+          <button onClick={logOut} className="bg-[#A3B087] text-[#313647] font-bold py-2 px-4 rounded hover:bg-[#8c9a6d] transition">
+            Log Out
+          </button>
 
           {/* Back Button */}
           <Link to="/">

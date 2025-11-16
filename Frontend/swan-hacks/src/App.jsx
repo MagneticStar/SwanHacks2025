@@ -27,18 +27,17 @@ function App() {
   });
 
   useEffect(() => {
-    // Try to get token from localStorage
     const token = localStorage.getItem('authToken');
     if (!token) return;
 
-    // Fetch user info from backend
     fetch('http://localhost:8080/api/users', {
+      method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+        'Authorization': `Bearer ${token}`
+      }
     })
     .then(res => {
-      if (!res.ok) throw new Error('Token invalid');
+      if (!res.ok) throw new Error('Invalid token');
       return res.json();
     })
     .then(data => {
@@ -52,7 +51,7 @@ function App() {
     })
     .catch(err => {
       console.error(err);
-      localStorage.removeItem('authToken'); // clear invalid token
+      localStorage.removeItem('authToken'); // remove token if invalid
     });
   }, []);
 
@@ -63,7 +62,7 @@ function App() {
           <Route path="/" element={<Home userInfo={user}/>} />
 
           {/* User */}
-          <Route path="/user-info" element={<UserInfo userInfo={user} />} />
+          <Route path="/user-info" element={<UserInfo userInfo={user} setUserInfo={setUser} />} />
           <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
           <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
