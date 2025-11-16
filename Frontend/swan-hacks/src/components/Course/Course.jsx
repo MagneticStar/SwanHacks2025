@@ -8,6 +8,7 @@ export default function Course({ userInfo, course, setResults }) {
   const [index, setIndex] = useState(0);      // Which image user is on
   const [eloChange, setEloChange] = useState(0); // Accumulated elo change
   const [correctArray, setCorrectArray] = useState(["","","","","",""]); // Track correctness
+  const [showDescription, setShowDescription] = useState(true);
 
   // Redirect if user not logged in
   useEffect(() => {
@@ -102,6 +103,30 @@ export default function Course({ userInfo, course, setResults }) {
     // Go to results page
     navigate("/results");
   }
+
+  if (showDescription) {
+      console.log(course.name);
+      console.log(course.description);
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#313647] px-5 py-10">
+          <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
+
+            <h1 className="text-2xl font-bold text-center mb-4">{course.name}</h1>
+
+            <p className="text-gray-700 mb-6 text-center">
+              {course.description}
+            </p>
+
+            <button
+              onClick={() => setShowDescription(false)}
+              className="w-full bg-[#313647] text-white py-2 rounded hover:bg-black transition"
+            >
+              Start Course
+            </button>
+          </div>
+        </div>
+      );
+    }
 
   if (images.length === 0) {
     return <p>Loading course images…</p>;

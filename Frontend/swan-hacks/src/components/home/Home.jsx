@@ -2,43 +2,87 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const courses = [
-    {
-        id: 13,
-        title: "Art",
-        description: "Learn the basics of React.",
-        image: "/imgs/artpreview.jpg",
-    },
-    {
-        id: 9,
-        title: "Buildings",
-        description: "Introduction to Spring Boot and REST APIs.",
-        image: "/imgs/buildingspreview.jpg",
-    },
-    {
-        id: 10,
-        title: "Cars",
-        description: "Learn the basics of React.",
-        image: "/imgs/carpreview.jpg",
-    },
-    {
-        id: 11,
-        title: "Landscapes",
-        description: "Introduction to Spring Boot and REST APIs.",
-        image: "/imgs/landscapespreview.jpg",
-    },
-    {
-        id: 8,
-        title: "People",
-        description: "Introduction to Spring Boot and REST APIs.",
-        image: "/imgs/peoplepreview.jpg",
-    },
-    {
-        id: 12,
-        title: "Belongings",
-        description: "Introduction to Spring Boot and REST APIs.",
-        image: "/imgs/goodspreview.jpg",
-    }
+  {
+    id: 13,
+    title: "Art",
+    description: `
+The Art course teaches students to identify AI-generated artwork, including
+digital paintings, comics, and graphic designs. Key giveaways include overly
+smooth or perfect gradients, unnatural color palettes, or reflections that don’t
+match the scene. Look for inconsistent anatomy in characters, unusual
+proportions, or repeated textures in patterns. AI may struggle with complex
+backgrounds, perspective, and fine brushstroke details, which can reveal
+artificial generation.
+    `,
+    image: "/imgs/artpreview.jpg",
+  },
+  {
+    id: 9,
+    title: "Buildings",
+    description: `
+In the Buildings course, students learn to spot AI-generated architecture and
+cityscapes. Common giveaways include unnatural or inconsistent structural lines,
+impossible perspectives, and mismatched windows or doors. Reflections in glass
+or water can appear warped, and shadows may not align correctly. Students will
+also learn to spot subtle distortions in textures like bricks, tiles, and roofing
+patterns that indicate AI manipulation.
+    `,
+    image: "/imgs/buildingspreview.jpg",
+  },
+  {
+    id: 10,
+    title: "Cars",
+    description: `
+This course helps identify AI-generated vehicles in images. Key signs include
+unrealistic proportions, misaligned wheels, odd reflections on surfaces, and
+distorted logos. AI often struggles with symmetrical features and fine details
+such as headlights, rims, and tire tread patterns. Backgrounds or reflections in
+mirrors may be inconsistent with the rest of the image, providing clues that the
+image is AI-generated.
+    `,
+    image: "/imgs/carpreview.jpg",
+  },
+  {
+    id: 11,
+    title: "Landscapes",
+    description: `
+The Landscape course focuses on spotting AI-created natural scenes, including
+forests, mountains, and rivers. Students will look for unnatural blending of
+elements, repeated patterns in foliage, and inconsistent lighting or shadows.
+Clouds, water reflections, and tree branches may appear blurred or unrealistic.
+Subtle signs like distorted horizons, floating rocks, or impossible color
+gradients can indicate AI manipulation.
+    `,
+    image: "/imgs/landscapespreview.jpg",
+  },
+  {
+    id: 8,
+    title: "People",
+    description: `
+This course focuses on recognizing AI-generated portraits and human images.
+Students will explore subtle inconsistencies in facial features, unnatural skin
+textures, and irregular lighting or reflections. Pay attention to asymmetrical
+eyes, slightly distorted teeth, or background elements that appear blurred or
+inconsistent. AI often struggles with hands, jewelry, and fine details in hair,
+so these can be giveaways when analyzing up-close portraits.
+    `,
+    image: "/imgs/peoplepreview.jpg",
+  },
+  {
+    id: 12,
+    title: "Belongings",
+    description: `
+In this course, students learn to detect AI-generated product images. Watch for
+unrealistic textures, overly vibrant colors, and distorted logos or labels.
+Shadows and reflections on shiny surfaces may be inconsistent. Small details
+like seams, stitching, or packaging edges can appear blurred or warped. AI often
+struggles with multiple small objects close together, so cluttered product shots
+may reveal artifacts or anomalies.
+    `,
+    image: "/imgs/goodspreview.jpg",
+  }
 ];
+
 
 
 const Home = ({userInfo, setCourse}) => {
@@ -89,7 +133,9 @@ const Home = ({userInfo, setCourse}) => {
                   onClick={() => {
                     setCourse(prev => ({
                       ...prev,
-                      id: course.id
+                      id: course.id,
+                      name: course.title,
+                      description: course.description
                     }))
                   }}
                   className="p-2 rounded-xl shadow-sm"
