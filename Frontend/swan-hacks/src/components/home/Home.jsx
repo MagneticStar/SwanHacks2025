@@ -29,10 +29,7 @@ const courses = [
 ];
 
 
-const Home = ({userInfo}) => {
-
-  console.log(userInfo);
-
+const Home = ({userInfo, setCourse}) => {
     return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -41,7 +38,7 @@ const Home = ({userInfo}) => {
           <div>dropdown</div>
             <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
                 <div>
-                {userInfo && userInfo.name !== '' ? (
+                {userInfo && userInfo.name ? (
                     <Link to="/user-info">
                     <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
                     </Link>
@@ -73,8 +70,14 @@ const Home = ({userInfo}) => {
                   {course.title}
                 </p>
 
-                <a
-                  href={`/courses/${course.id}`}
+                <Link
+                  to="/courses"
+                  onClick={() => {
+                    setCourse(prev => ({
+                      ...prev,
+                      id: course.id
+                    }))
+                  }}
                   className="p-2 rounded-xl shadow-sm"
                 >
                   <img
@@ -82,7 +85,7 @@ const Home = ({userInfo}) => {
                     alt="Play"
                     className="w-6 h-6"
                   />
-                </a>
+                </Link>
               </div>
             </div>
             </div>
