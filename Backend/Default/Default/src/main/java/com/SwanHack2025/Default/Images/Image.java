@@ -1,5 +1,6 @@
 package com.SwanHack2025.Default.Images;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import com.SwanHack2025.Default.Courses.Course;
 
@@ -11,12 +12,14 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String path;
 
     private Integer imgElo;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
 
     // Constructors

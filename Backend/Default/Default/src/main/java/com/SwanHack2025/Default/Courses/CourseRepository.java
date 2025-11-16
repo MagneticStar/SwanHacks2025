@@ -12,6 +12,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     // Custom query method to find course by name
     Optional<Course> findByName(String name);
 
+    Optional<Course> deleteByName(String name);
+
     // Custom query method to check if a course name exists
     boolean existsByName(String name);
 

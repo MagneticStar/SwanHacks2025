@@ -16,7 +16,6 @@ public class Course{
 
     private String name;
 
-    @Column(length = 1000)
     private String description;
 
 
@@ -86,5 +85,9 @@ public class Course{
     public void removeImage(Image image) {
         images.remove(image);
         image.setCourse(null);
+    }
+
+    public void removeImageById(Long id){
+        images.removeIf(image -> image.getId().equals(id));
     }
 }
