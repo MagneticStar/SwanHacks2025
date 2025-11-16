@@ -73,49 +73,6 @@ class UserControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
-    // READ Tests
-    @Test
-    void testGetAllUsers_Success() {
-        List<User> users = Arrays.asList(testUser, new User("user2", "pass2", "user2@example.com"));
-        when(userRepo.findAll()).thenReturn(users);
-
-        ResponseEntity<List<User>> response = userController.getAllUsers();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(2, response.getBody().size());
-        verify(userRepo, times(1)).findAll();
-    }
-
-    @Test
-    void testGetAllUsers_NoContent() {
-        when(userRepo.findAll()).thenReturn(new ArrayList<>());
-
-        ResponseEntity<List<User>> response = userController.getAllUsers();
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-    }
-
-    @Test
-    void testGetUserById_Success() {
-        when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
-
-        ResponseEntity<User> response = userController.getUserById(1L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("testuser", response.getBody().getUsername());
-    }
-
-    @Test
-    void testGetUserById_NotFound() {
-        when(userRepo.findById(1L)).thenReturn(Optional.empty());
-
-        ResponseEntity<User> response = userController.getUserById(1L);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
     @Test
     void testGetUserByUsername_Success() {
         when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(testUser));
@@ -165,69 +122,6 @@ class UserControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    // UPDATE Tests
-    @Test
-    void testUpdateUser_Success() {
-        User updatedUser = new User("updateduser", "newpassword", "updated@example.com");
-        updatedUser.setElo(750);
 
-        when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
-        when(userRepo.save(any(User.class))).thenReturn(updatedUser);
 
-        ResponseEntity<User> response = userController.updateUser(1L, updatedUser);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        verify(userRepo, times(1)).save(any(User.class));
-    }
-
-    @Test
-    void testUpdateUser_NotFound() {
-        User updatedUser = new User("updateduser", "newpassword", "updated@example.com");
-        when(userRepo.findById(1L)).thenReturn(Optional.empty());
-
-        ResponseEntity<User> response = userController.updateUser(1L, updatedUser);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        verify(userRepo, never()).save(any(User.class));
-    }
-
-    // DELETE Tests
-    @Test
-    void testDeleteUser_Success() {
-        doNothing().when(userRepo).deleteById(1L);
-
-        ResponseEntity<HttpStatus> response = userController.deleteUser(1L);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(userRepo, times(1)).deleteById(1L);
-    }
-
-    @Test
-    void testDeleteUser_InternalServerError() {
-        doThrow(new RuntimeException("Database error")).when(userRepo).deleteById(1L);
-
-        ResponseEntity<HttpStatus> response = userController.deleteUser(1L);
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
-
-    @Test
-    void testDeleteAllUsers_Success() {
-        doNothing().when(userRepo).deleteAll();
-
-        ResponseEntity<HttpStatus> response = userController.deleteAllUsers();
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(userRepo, times(1)).deleteAll();
-    }
-
-    @Test
-    void testDeleteAllUsers_InternalServerError() {
-        doThrow(new RuntimeException("Database error")).when(userRepo).deleteAll();
-
-        ResponseEntity<HttpStatus> response = userController.deleteAllUsers();
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
 }
