@@ -6,6 +6,7 @@ import UserDeletion from "./components/user/UserDeletion";
 import UserSignup from './components/user/UserSignup';
 import UserLogin from './components/user/UserLogin';
 import UserInfo from './components/user/UserInfo';
+import Home from './components/home/Home';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/user-info" element={<UserInfo userInfo={user} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
 
+          <Route path="/" element={<Home/>} />       
         </Routes>
       </div>
     </Router>

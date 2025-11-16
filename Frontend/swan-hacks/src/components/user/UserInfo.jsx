@@ -12,11 +12,10 @@ export default function UserInfo({ userInfo }) {
 
       {userInfo && userInfo.id ? (
         <div style={{ marginTop: "1rem" }}>
-          <p><strong>ID:</strong> {userInfo.id}</p>
-          <p><strong>Name:</strong> {userInfo.name}</p>
-          <p><strong>Username:</strong> {userInfo.username}</p>
           <p><strong>Elo:</strong> {userInfo.elo}</p>
-          <Link src="./delete-user">Delete user</Link>
+          <p><strong>Name:</strong> {userInfo.name}</p>
+          <p><strong>Email:</strong> {userInfo.email}</p>
+          <Link to="/delete-user">Delete user</Link>
         </div>
       ) : (
         <p>No user info available.</p>
