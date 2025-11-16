@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.SwanHack2025.Default.Helpers.UserHelper;
+import com.SwanHack2025.Default.Auth.LoginResponse;
+import com.SwanHack2025.Default.Auth.JwtUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,21 +18,43 @@ public class UserController {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     // CREATE - Add's a new user
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
-            if(userRepo.existsByUsername(user.getUsername())) {
-                System.out.println("Username already exists!!!");
-                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            // Check if username already exists
+            if (userRepo.existsByUsername(user.getUsername())) {
+                return new ResponseEntity<>("Username already exists", HttpStatus.CONFLICT);
             }
+
+            // Set default ELO
             user.setElo(500);
+
+            // Save the new user
             User newUser = userRepo.save(user);
-            return ResponseEntity.ok(newUser);
+
+            // Generate JWT token
+            String token = jwtUtil.generateToken(newUser.getId());
+
+            // Return LoginResponse
+            LoginResponse response = new LoginResponse(
+                    token,
+                    newUser.getId(),
+                    newUser.getUsername(),
+                    newUser.getEmail(),
+                    newUser.getElo()
+            );
+
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 
     // READ - Get current user info
