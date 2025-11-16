@@ -29,7 +29,7 @@ const courses = [
 ];
 
 
-const Home = ({userInfo}) => {
+const Home = ({userInfo, setCourse}) => {
     return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -70,8 +70,14 @@ const Home = ({userInfo}) => {
                   {course.title}
                 </p>
 
-                <a
-                  href={`/courses/${course.id}`}
+                <Link
+                  to="/courses"
+                  onClick={() => {
+                    setCourse(prev => ({
+                      ...prev,
+                      id: course.id
+                    }))
+                  }}
                   className="p-2 rounded-xl shadow-sm"
                 >
                   <img
@@ -79,7 +85,7 @@ const Home = ({userInfo}) => {
                     alt="Play"
                     className="w-6 h-6"
                   />
-                </a>
+                </Link>
               </div>
             </div>
             </div>
