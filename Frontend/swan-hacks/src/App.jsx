@@ -11,8 +11,8 @@ import Home from './components/home/Home';
 function App() {
 
   const [user, setUser] = useState({
-    id: '',
-    name: '',
+    id: '1',
+    name: '1',
     email: '',
     elo: ''
   });
