@@ -19,17 +19,17 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    private Integer elo;
+    @Column(nullable = false)
+    private Integer elo = 500;
 
     // Constructors
     public User() {
     }
 
-    public User(String username, String password,String email, Integer eloRanking) {
+    public User(String username, String password,String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.elo = elo;
     }
 
     // Getters and Setters

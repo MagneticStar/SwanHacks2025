@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CourseRepository<Course> extends JpaRepository<Course, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
 
     // Custom query method to find course by name
     Optional<Course> findByName(String name);

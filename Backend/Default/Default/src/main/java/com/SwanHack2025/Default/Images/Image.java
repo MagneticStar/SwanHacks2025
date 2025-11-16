@@ -15,6 +15,8 @@ public class Image {
 
     private Integer imgElo;
 
+    private Boolean isAi;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
@@ -58,5 +60,11 @@ public class Image {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    public Boolean getIsAi() { return isAi; }
+
+    public void setIsAi(Boolean isAi) {
+        this.isAi = isAi;
     }
 }
