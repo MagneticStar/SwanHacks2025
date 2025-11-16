@@ -3,6 +3,7 @@ package com.SwanHack2025.Default.Images;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import com.SwanHack2025.Default.Courses.Course;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "images")
@@ -15,8 +16,10 @@ public class Image {
     @Column(unique = true, nullable = false)
     private String path;
 
-    private Integer imgElo;
+    @Column(nullable = false)
+    private Integer imgElo = 500;
 
+    @Column(nullable = false)
     private Boolean isAi;
 
     @ManyToOne
@@ -27,9 +30,9 @@ public class Image {
     // Constructors
     public Image() {}
 
-    public Image(String path, Integer imgElo) {
+    public Image(String path) {
         this.path = path;
-        this.imgElo = imgElo;
+        imgElo = 500;
     }
 
     // Getters and Setters
