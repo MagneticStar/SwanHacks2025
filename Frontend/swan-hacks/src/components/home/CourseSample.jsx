@@ -1,1 +1,0 @@
-// This will show a small sample of a course
