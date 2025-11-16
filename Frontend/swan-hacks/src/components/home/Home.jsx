@@ -28,7 +28,7 @@ const courses = [
     }
 ];
 
-const Home = () => {
+const Home = (userInfo) => {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -36,20 +36,22 @@ const Home = () => {
         <div className="max-w-[1200px] mx-auto px-5 py-3 flex items-center justify-between">
           <div>dropdown</div>
             <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
-          <div>
-            <Link to="/login">
-              <p className="hover:underline cursor-pointer text-[#313647]">user/login</p>
-            </Link>
-          </div>
+                <div>
+                {userInfo?.name != '' ? (
+                    <Link to="/user-info">
+                    <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
+                    </Link>
+                ) : (
+                    <Link to="/login">
+                    <p className="hover:underline cursor-pointer text-[#313647]">Login</p>
+                    </Link>
+                )}
+                </div>
         </div>
       </div>
 
       {/* Main content */}
       <div className="flex-1 overflow-y-auto mt-[68px] px-5 py-5">
-        {/* <div className="mb-6">
-          <h2 className="text-2xl font-bold text-[#313647] mb-2">Courses</h2>
-          <div className="border-t border-[#A3B087]" />
-        </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 w-3/4 mx-auto">
         {courses.map(course => (

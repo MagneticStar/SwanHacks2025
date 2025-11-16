@@ -11,8 +11,8 @@ import Home from './components/home/Home';
 function App() {
 
   const [user, setUser] = useState({
-    id: '1',
-    name: '1',
+    id: '',
+    name: '',
     email: '',
     elo: ''
   });
@@ -35,12 +35,16 @@ function App() {
         width: "100vw"
       }}>
         <Routes>
-          <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
-          <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
+          <Route path="/" element={<Home userInfo={user}/>} />       
+
+          {/* User */}
           <Route path="/user-info" element={<UserInfo userInfo={user} />} />
+          <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
+          <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
 
-          <Route path="/" element={<Home/>} />       
+          {/* Course */}
+          {/* Fill in here!!! */}
         </Routes>
       </div>
     </Router>
