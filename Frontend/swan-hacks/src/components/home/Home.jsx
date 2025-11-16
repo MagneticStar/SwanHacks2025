@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 const courses = [
     {
         id: 1,
-        title: "React for Beginners",
-        description: "Learn the basics of React.",
-        image: "/imgs/react.svg",
+        title: "Cars",
+        description: "Intersections, and vehicles",
+        image: "/assets/car1",
     },
     {
         id: 2,
