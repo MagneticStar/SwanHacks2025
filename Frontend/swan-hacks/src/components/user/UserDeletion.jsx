@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function DeleteUser({ userInfo, setUserInfo }) {
   const navigate = useNavigate();
@@ -9,22 +9,33 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
 
   // Redirect if user not logged in
   useEffect(() => {
-    if (!userInfo || !userInfo.id || userInfo.username === "") {
+    if (!userInfo || !userInfo.id || userInfo.user === "") {
       navigate("/");
     }
   }, [userInfo, navigate]);
 
+  if (userInfo.name === '') {
+    navigate('/login');
+  }
+
+  // Update form state when inputs change
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  // Handle account deletion
   async function handleDelete(e) {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (form.username !== userInfo.username) {
-      setError("Username does not match logged-in user.");
+    // Check if entered username matches logged-in user
+    if (form.username !== userInfo.user) {
+      console.log(form);
+      console.log(userInfo);
+      setError(
+        "Username does not match logged-in user: " + userInfo.user
+      );
       return;
     }
 
@@ -40,17 +51,19 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
 
       if (!res.ok) throw new Error("Delete failed");
 
-      // Clear user info
+      // Clear form and user info
+      setForm({ username: "", password: "" });
       setUserInfo({
         id: "",
         name: "",
-        username: "",
+        user: "",
         email: "",
         elo: "",
       });
 
-      setSuccess("Account deleted successfully 🤰");
+      setSuccess("Account deleted successfully");
 
+      // Navigate to signup after a short delay
       setTimeout(() => navigate("/signup"), 1500);
     } catch (err) {
       console.error(err);
@@ -61,7 +74,9 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10">
       <div className="w-full max-w-md bg-[#FFF8D4] rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-[#313647] mb-3">Delete Account</h1>
+        <h1 className="text-2xl font-bold text-[#313647] mb-3">
+          Delete Account
+        </h1>
         <p className="text-[#313647] mb-6">
           Enter your username and password to confirm account deletion.
         </p>

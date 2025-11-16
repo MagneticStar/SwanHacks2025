@@ -25,9 +25,8 @@ public class UserController {
             }
             user.setElo(500);
             User newUser = userRepo.save(user);
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+            return ResponseEntity.ok(newUser);
         } catch (Exception e) {
-            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

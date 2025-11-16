@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Path: http://localhost:8080/api/users  (POST)
 // Keys: username, password, email
 // returns: id => user.id
 
 export default function UserSignup({ user, setUser }) {
+  const navigate = useNavigate();
   const [answers, setAnswers] = useState({
     username: "",
     email: "",
@@ -48,12 +49,16 @@ export default function UserSignup({ user, setUser }) {
 
       const data = await response.json();
 
+    // 1️⃣ Save user in state
       setUser({
         id: data.id,
-        username: data.username,
+        name: data.username,
         email: data.email,
         elo: data.elo
       });
+
+      // 2️⃣ Navigate to user-info page
+      navigate("/user-info");
 
     } catch (err) {
       console.error(err);
