@@ -1,5 +1,6 @@
 package com.SwanHack2025.Default.Users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,7 +20,8 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    private Integer elo;
+    @Column(nullable = false)
+    private Integer elo = 500;
 
     // Constructors
     public User() {
@@ -29,7 +31,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.elo = 500;
     }
 
     // Getters and Setters
@@ -49,6 +50,7 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
