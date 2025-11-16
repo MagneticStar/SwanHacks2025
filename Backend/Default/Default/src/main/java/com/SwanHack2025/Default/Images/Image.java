@@ -1,5 +1,6 @@
 package com.SwanHack2025.Default.Images;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import com.SwanHack2025.Default.Courses.Course;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -12,7 +13,7 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String path;
 
     @Column(nullable = false)

@@ -20,9 +20,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
+            if(userRepo.existsByUsername(user.getUsername())) {
+                System.out.println("Username already exists!!!");
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+            user.setElo(500);
             User newUser = userRepo.save(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -42,14 +48,30 @@ public class UserController {
         }
     }
 
+
     // READ - Get user by username
     @GetMapping("/username/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
         Optional<User> userData = userRepo.findByUsername(username);
-
         if (userData.isPresent()) {
             return new ResponseEntity<>(userData.get(), HttpStatus.OK);
         } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Read - Get user by username and password
+    @GetMapping("/username/{username}/password/{password}")
+    public ResponseEntity<User> getUserByUsernameAndPassword(@PathVariable("username") String username,@PathVariable("password") String password){
+        Optional<User> userData = userRepo.findByUsername(username);
+        if (userData.isPresent()) {
+            if(userData.get().getPassword().equals(password)) {
+                return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+            } else {
+                System.out.println("Wrong password!!!");
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        } else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

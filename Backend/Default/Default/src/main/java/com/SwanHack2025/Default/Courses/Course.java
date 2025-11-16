@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "courses")
-public class Course {
+public class Course{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,6 @@ public class Course {
 
     private String name;
 
-    @Column(length = 1000)
     private String description;
 
 
@@ -34,7 +33,6 @@ public class Course {
     public Course(String name, String description, String previewImageUrl) {
         this.name = name;
         this.description = description;
-
         this.previewImageUrl = previewImageUrl;
     }
 
@@ -89,5 +87,9 @@ public class Course {
     public void removeImage(Image image) {
         images.remove(image);
         image.setCourse(null);
+    }
+
+    public void removeImageById(Long id){
+        images.removeIf(image -> image.getId().equals(id));
     }
 }
