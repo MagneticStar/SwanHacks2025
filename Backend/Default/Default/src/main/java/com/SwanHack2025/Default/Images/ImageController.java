@@ -2,6 +2,7 @@ package com.SwanHack2025.Default.Images;
 
 import com.SwanHack2025.Default.Courses.Course;
 import com.SwanHack2025.Default.Courses.CourseRepository;
+import com.SwanHack2025.Default.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import com.SwanHack2025.Default.Users.User;
+import com.SwanHack2025.Default.Auth.JwtUtil;
+
 
 @RestController
 @RequestMapping("/api/images")
@@ -19,6 +23,12 @@ public class ImageController {
 
     @Autowired
     private CourseRepository courseRepo;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepo;
 
     // CREATE - Add a new image
     @PostMapping
@@ -79,4 +89,46 @@ public class ImageController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/guess")
+    public ResponseEntity<?> guessImage(
+            @RequestHeader("Authorization") String authHeader,
+            @RequestBody ImageGuessRequest request) {
+
+        try {
+            // Extract token from "Bearer <token>"
+            String token = authHeader.replace("Bearer ", "");
+            Long userId = jwtUtil.validateAndGetUserId(token);
+
+            User user = userRepo.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            Image image = imageRepo.findById(request.getImageId())
+                    .orElseThrow(() -> new RuntimeException("Image not found"));
+
+            boolean correct = image.getIsAi() == request.isGuessedAI();
+
+            int changeAmount = 10;
+            if (correct) {
+                user.setElo(user.getElo() + changeAmount);
+                image.setImgElo(image.getImgElo() - changeAmount);
+            } else {
+                user.setElo(user.getElo() - changeAmount);
+                image.setImgElo(image.getImgElo() + changeAmount);
+            }
+
+            userRepo.save(user);
+            imageRepo.save(image);
+
+            return ResponseEntity.ok(new Object() {
+                public final boolean correctGuess = correct;
+                public final int userElo = user.getElo();
+                public final int imageElo = image.getImgElo();
+            });
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }
