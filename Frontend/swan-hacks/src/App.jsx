@@ -7,6 +7,8 @@ import UserSignup from './components/user/UserSignup';
 import UserLogin from './components/user/UserLogin';
 import UserInfo from './components/user/UserInfo';
 import Home from './components/home/Home';
+import Course from './components/Course/Course';
+import Leaderboard from './components/leaderboard/leaderboard';
 
 function App() {
   const [user, setUser] = useState({
@@ -22,8 +24,6 @@ function App() {
     name: '',
     preview: '',
     description: '',
-    timeTaken: '',
-    percentScore: ''
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function App() {
     .then(data => {
       setUser({
         id: data.id,
-        name: data.name,
+        name: data.username,
         email: data.email,
         elo: data.elo,
         token: token
@@ -59,16 +59,16 @@ function App() {
     <Router>
       <div style={{ display: "flex", flexDirection: "column", height: "100vh", width: "100vw" }}>
         <Routes>
-          <Route path="/" element={<Home userInfo={user}/>} />
+          <Route path="/" element={<Home userInfo={user} setCourse={setCourse}/>} />
 
           {/* User */}
-          <Route path="/user-info" element={<UserInfo userInfo={user} setUserInfo={setUser} />} />
           <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
           <Route path="/signup" element={<UserSignup userInfo={user} setUser={setUser} />} />
+          <Route path="/user-info" element={<UserInfo userInfo={user} setUserInfo={setUser} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
-
-          {/* Course */}
-          {/* Fill in here!!! */}
+          <Route path='/courses' element={<Course userInfo={user} course={course} setCourse={setCourse}/>} />
+          <Route path="/results" element={<Results userInfo={user} elo={} />} />
+          <Route path='/leaderboard' element={<Leaderboard />} />
         </Routes>
       </div>
     </Router>

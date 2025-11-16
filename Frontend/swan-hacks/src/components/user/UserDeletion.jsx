@@ -9,16 +9,12 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
 
   // Redirect if user not logged in
   useEffect(() => {
-    if (!userInfo || !userInfo.id || userInfo.user === "") {
-      navigate("/");
+    if (!userInfo || !userInfo.id) {
+      navigate("/login");
     }
   }, [userInfo, navigate]);
 
-  if (userInfo.name === '') {
-    navigate('/login');
-  }
-
-  // Update form state when inputs change
+  // Update form state
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
@@ -29,54 +25,48 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
     setError("");
     setSuccess("");
 
-    // Check if entered username matches logged-in user
-    if (form.username !== userInfo.user) {
-      console.log(form);
-      console.log(userInfo);
-      setError(
-        "Username does not match logged-in user: " + userInfo.user
-      );
-      return;
-    }
+    // TODO: remove this - or implement
+    // Optional: check username client-side
+    // if (form.username !== userInfo.name) {
+    //   setError(`Username does not match logged-in user: ${userInfo.name}`);
+    //   return;
+    // }
 
     try {
       const res = await fetch("http://localhost:8080/api/users", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`, // <-- send token
+        },
         body: JSON.stringify({
           username: form.username,
           password: form.password,
         }),
       });
 
-      if (!res.ok) throw new Error("Delete failed");
+      if (res.status === 204) {
+        // Success: account deleted
+        setForm({ username: "", password: "" });
+        setUserInfo({ id: "", name: "", user: "", email: "", elo: "", token: "" });
+        setSuccess("Account deleted successfully");
 
-      // Clear form and user info
-      setForm({ username: "", password: "" });
-      setUserInfo({
-        id: "",
-        name: "",
-        user: "",
-        email: "",
-        elo: "",
-      });
-
-      setSuccess("Account deleted successfully");
-
-      // Navigate to signup after a short delay
-      setTimeout(() => navigate("/signup"), 1500);
+        setTimeout(() => navigate("/signup"), 1500);
+      } else if (res.status === 401) {
+        setError("Invalid username or password.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } catch (err) {
       console.error(err);
-      setError("Invalid username or password.");
+      setError("Network error. Please try again.");
     }
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10">
       <div className="w-full max-w-md bg-[#FFF8D4] rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-[#313647] mb-3">
-          Delete Account
-        </h1>
+        <h1 className="text-2xl font-bold text-[#313647] mb-3">Delete Account</h1>
         <p className="text-[#313647] mb-6">
           Enter your username and password to confirm account deletion.
         </p>
@@ -103,7 +93,6 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
           />
 
           <div className="flex w-full gap-4 mt-2">
-            {/* Delete button */}
             <button
               type="submit"
               className="flex-1 bg-red-500 text-white font-bold py-2 rounded hover:bg-red-600 transition"
@@ -111,7 +100,6 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
               Delete Account
             </button>
 
-            {/* Back button */}
             <button
               type="button"
               onClick={() => navigate("/user-info")}

@@ -1,18 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// we need to grab 6 random images from the backend
+// we need to know (course, description) from frontend
+
+// display stuff
+
+// grab user input
+// send to backend the users choice
+
+// get answer from backend (Right or wrong / New ELO)
+// user clicks button
+
+// loop back to display stuff (until images run out)
+
+// display ending screen (elo gained lost / Correct incorrect)
+// Collect user input (home / again)
+
+
+
 export default function Course({ userInfo, course, setCourse }) {
   const navigate = useNavigate();
 
   const [images, setImages] = useState([]);  // Stores 6 images from server
   const [index, setIndex] = useState(0);     // Which image user is on
   const [score, setScore] = useState(0);
-  const [startTime, setStartTime] = useState(null);
 
   // Redirect if user not logged in
   useEffect(() => {
     if (!userInfo || !userInfo.id) {
-      alert("⚠️ You must be logged in to take this course.");
+      alert("You must be logged in to take this course.");
       navigate("/login");
     }
   }, [userInfo, navigate]);
@@ -21,15 +38,24 @@ export default function Course({ userInfo, course, setCourse }) {
   useEffect(() => {
     async function loadImages() {
       try {
-        const res = await fetch("http://localhost:8080/api/course/images");
+        console.log(course.id);
+        const res = await fetch(`http://localhost:8080/api/images/course/${course.id}`);
         const data = await res.json();
-
         // Server must return: [{ id, url, isAI }, ...]
-        setImages(data.slice(0, 6));
-        setStartTime(Date.now());
+        // pick random 6 imgs
+        const indices = new Set();
+        while (indices.size < 6 && indices.size < data.length) {
+          indices.add(Math.floor(Math.random() * data.length));
+        }
+        const imgs = [...indices].map(i => ({
+          path: data[i].path,
+          id: data[i].id
+        }));
+        console.log(imgs);
+        setImages(imgs);
       } catch (err) {
         console.error(err);
-        alert("Failed to load course images 🤰");
+        alert("Failed to load course images");
       }
     }
 
@@ -41,26 +67,31 @@ export default function Course({ userInfo, course, setCourse }) {
     const current = images[index];
 
     try {
-      await fetch("http://localhost:8080/api/course/submit-guess", {
+      const response = await fetch("http://localhost:8080/api/images/guess", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`, // <-- send token
+        },
         body: JSON.stringify({
-          userId: userInfo.id,
           imageId: current.id,
-          response: responseValue,      // 1 or 0
-          imageIsAI: current.isAI ? 1 : 0
+          guessedAI: responseValue,   
         })
       });
+      if (!response.ok) {
+        throw new Error(await response.text()); 
+      }
+
+      const result = await response.json();
+
+      if (result.correctGuess) {
+        setScore(score + result.userElo);
+      }
+
     } catch (err) {
       console.error(err);
     }
-
-    // Check correctness
-    const correct = (current.isAI ? 1 : 0) === responseValue;
-    if (correct) {
-      setScore(score + 1);
-    }
-
+    
     // Move to next image
     if (index + 1 < images.length) {
       setIndex(index + 1);
@@ -71,17 +102,9 @@ export default function Course({ userInfo, course, setCourse }) {
 
   // Called after last image
   function finishCourse() {
-    const endTime = Date.now();
-    const seconds = Math.round((endTime - startTime) / 1000);
-
-    const percent = Math.round((score / images.length) * 100);
 
     // Save into course object
-    setCourse({
-      ...course,
-      timeTaken: `${seconds}s`,
-      percentScore: `${percent}%`
-    });
+
 
     // Go to results page
     navigate("/results");
@@ -94,29 +117,42 @@ export default function Course({ userInfo, course, setCourse }) {
   const current = images[index];
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
-      <h1>{course.name}</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen px-5 py-10 bg-[#313647]">
+  <div className="w-full max-w-md bg-[#FFF8D4] rounded-lg shadow-lg p-6">
+    {/* Title */}
+    <h1 className="text-2xl font-bold text-[#313647] text-center mb-6">
+      {course.name}
+    </h1>
 
-      <p>Image {index + 1} / {images.length}</p>
+    {/* Progress indicator */}
+    <p className="text-[#313647] text-center mb-4">
+      Image {index + 1} / {images.length}
+    </p>
 
-      <img
-        src={current.url}
-        alt="Course"
-        style={{ width: "100%", borderRadius: "8px", marginBottom: "1rem" }}
-      />
+    {/* Large central image */}
+    <img
+      src={current.path}
+      alt="Course"
+      className="w-full max-h-[400px] object-cover rounded-lg mb-6"
+    />
 
-      <div>
-        <button
-          onClick={() => submitGuess(1)}
-          style={{ marginRight: "1rem" }}
-        >
-          AI
-        </button>
+    {/* Buttons at the bottom */}
+    <div className="flex gap-4 justify-center">
+      <button
+        onClick={() => submitGuess(1)}
+        className="flex-1 bg-[#4CAF50] text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition"
+      >
+        AI
+      </button>
 
-        <button onClick={() => submitGuess(0)}>
-          Not AI
-        </button>
-      </div>
+      <button
+        onClick={() => submitGuess(0)}
+        className="flex-1 bg-[#f44336] text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition"
+      >
+        Not AI
+      </button>
     </div>
+  </div>
+</div>
   );
 }

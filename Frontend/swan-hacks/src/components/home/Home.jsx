@@ -3,28 +3,40 @@ import { Link } from 'react-router-dom';
 
 const courses = [
     {
-        id: 1,
+        id: 13,
         title: "Art",
         description: "Learn the basics of React.",
         image: "/imgs/artpreview.jpg",
     },
     {
-        id: 2,
+        id: 9,
         title: "Buildings",
         description: "Introduction to Spring Boot and REST APIs.",
         image: "/imgs/buildingspreview.jpg",
     },
     {
-        id: 3,
+        id: 10,
         title: "Cars",
         description: "Learn the basics of React.",
         image: "/imgs/carpreview.jpg",
     },
     {
-        id: 4,
+        id: 11,
         title: "Landscapes",
         description: "Introduction to Spring Boot and REST APIs.",
         image: "/imgs/landscapespreview.jpg",
+    },
+    {
+        id: 8,
+        title: "People",
+        description: "Introduction to Spring Boot and REST APIs.",
+        image: "/imgs/peoplepreview.jpg",
+    },
+    {
+        id: 12,
+        title: "Belongings",
+        description: "Introduction to Spring Boot and REST APIs.",
+        image: "/imgs/goodspreview.jpg",
     }
 ];
 
@@ -35,19 +47,21 @@ const Home = ({userInfo, setCourse}) => {
       {/* Header */}
       <div className="fixed top-0 left-0 w-full bg-[#A3B087] border-b-2 border-[#FFF8D4] z-50">
         <div className="max-w-[1200px] mx-auto px-5 py-3 flex items-center justify-between">
-          <div>dropdown</div>
-            <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
-                <div>
-                {userInfo && userInfo.name ? (
-                    <Link to="/user-info">
-                    <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
-                    </Link>
-                ) : (
-                    <Link to="/login">
-                    <p className="hover:underline cursor-pointer text-[#313647]">Login</p>
-                    </Link>
-                )}
-                </div>
+          <Link to="/leaderboard">
+            <p className="hover:underline cursor-pointer text-[#313647]">Leaderboard</p>
+          </Link>
+          <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
+          <div>
+              {userInfo && userInfo.name !== '' ? (
+                <Link to="/user-info">
+                  <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <p className="hover:underline cursor-pointer text-[#313647]">Login</p>
+                </Link>
+              )}
+          </div>
         </div>
       </div>
 

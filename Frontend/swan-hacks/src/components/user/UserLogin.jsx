@@ -45,7 +45,7 @@ export default function UserLogin({ setUserInfo }) {
       // Save user info and token
       setUserInfo({
         id: data.id,
-        name: data.name,
+        name: data.username,
         email: data.email,
         elo: data.elo,
         token: data.token
