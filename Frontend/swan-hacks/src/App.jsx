@@ -67,7 +67,7 @@ function App() {
           <Route path="/user-info" element={<UserInfo userInfo={user} setUserInfo={setUser} />} />
           <Route path="/delete-user" element={<UserDeletion userInfo={user} setUserInfo={setUser} />} />
           <Route path='/courses' element={<Course userInfo={user} course={course} setCourse={setCourse}/>} />
-          <Route path="/results" element={<Results userInfo={user} elo={} />} />
+{/*           <Route path="/results" element={<Results userInfo={user} elo={} />} /> */}
           <Route path='/leaderboard' element={<Leaderboard />} />
         </Routes>
       </div>
