@@ -56,7 +56,7 @@ export default function UserInfo({ userInfo, setUserInfo }) {
           <div className="flex justify-between items-center">
             <p><strong>Email:</strong> {userInfo.email}</p>
             <Link to="/">
-              <button className="bg-[#A3B087] text-[#313647] font-bold py-2 px-4 rounded hover:bg-[#8c9a6d] transition">
+              <button className="bg-[#313647] text-[#FFF8D4] font-bold py-2 px-4 rounded hover:bg-[#222939] transition">
                 Back
               </button>
             </Link>
