@@ -9,6 +9,7 @@ import com.SwanHack2025.Default.Auth.LoginResponse;
 import com.SwanHack2025.Default.Auth.JwtUtil;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -36,6 +37,7 @@ public class UserController {
             // Save the new user
             User newUser = userRepo.save(user);
 
+            // Generate JWT token
             // Generate JWT token
             String token = jwtUtil.generateToken(newUser.getId());
 
@@ -116,16 +118,25 @@ public class UserController {
 
     // UPDATE - Update user by ID
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String authHeader, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String authHeader, @RequestBody UserDTO propUser) {
         User reqUser = UserHelper.getCurrentUser(authHeader);
         Long id = reqUser.getId();
         Optional<User> userData = userRepo.findById(id);
 
         if (userData.isPresent()) {
             User existingUser = userData.get();
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setElo(user.getElo());
+
+            if (Objects.equals(propUser.getPassword(), existingUser.getPassword()) && Objects.equals(propUser.getUsername(), existingUser.getUsername())) {
+                existingUser.setEmail((propUser.getProposedEmail()).isEmpty() ?
+                        existingUser.getEmail() : propUser.getProposedEmail());
+
+                existingUser.setUsername((propUser.getProposedUsername().isEmpty()) ?
+                        existingUser.getUsername() : propUser.getProposedUsername());
+
+                existingUser.setPassword((propUser.getPassword().isEmpty()) ?
+                        existingUser.getPassword() : propUser.getProposedPassword());
+
+            }
 
             return new ResponseEntity<>(userRepo.save(existingUser), HttpStatus.OK);
         } else {
@@ -135,14 +146,21 @@ public class UserController {
 
     // DELETE - Delete current users account
     @DeleteMapping
-    public ResponseEntity<HttpStatus> deleteUser(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<HttpStatus> deleteUser(@RequestHeader("Authorization") String authHeader, @RequestBody User user) {
         User reqUser = UserHelper.getCurrentUser(authHeader);
         Long id = reqUser.getId();
-        try {
-            userRepo.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if (Objects.equals(user.getUsername(), reqUser.getUsername()) && Objects.equals(user.getPassword(), reqUser.getPassword())) {
+            try {
+                userRepo.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            System.out.println("username and provided username did not match: " +
+                    user.getUsername() + " did not provide the same password or user as " + reqUser.getUsername());
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }
