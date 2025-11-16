@@ -4,9 +4,15 @@ import { Link } from 'react-router-dom';
 const courses = [
     {
         id: 1,
+<<<<<<< HEAD
+        title: "Cars",
+        description: "Intersections, and vehicles",
+        image: "/assets/car1",
+=======
         title: "Art",
         description: "Learn the basics of React.",
         image: "/imgs/artpreview.jpg",
+>>>>>>> eb83c6e7082ae11c373746f7a18b096df42b4c2f
     },
     {
         id: 2,
@@ -29,7 +35,14 @@ const courses = [
 ];
 
 
+<<<<<<< HEAD
+const Home = ({userInfo}) => {
+
+  console.log(userInfo);
+
+=======
 const Home = ({userInfo, setCourse}) => {
+>>>>>>> eb83c6e7082ae11c373746f7a18b096df42b4c2f
     return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -38,7 +51,7 @@ const Home = ({userInfo, setCourse}) => {
           <div>dropdown</div>
             <div className="text-3xl font-bold text-[#313647]">AI Spotter</div>
                 <div>
-                {userInfo && userInfo.name ? (
+                {userInfo && userInfo.name !== '' ? (
                     <Link to="/user-info">
                     <p className="hover:underline cursor-pointer text-[#313647]">View Profile</p>
                     </Link>
