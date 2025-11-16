@@ -4,27 +4,27 @@ import { Link } from 'react-router-dom';
 const courses = [
     {
         id: 1,
-        title: "React for Beginners",
+        title: "Art",
         description: "Learn the basics of React.",
-        image: "/imgs/react.svg",
+        image: "/imgs/artpreview.jpg",
     },
     {
         id: 2,
-        title: "Spring Boot Fundamentals",
+        title: "Buildings",
         description: "Introduction to Spring Boot and REST APIs.",
-        image: "/imgs/vite.svg",
+        image: "/imgs/buildingspreview.jpg",
     },
     {
         id: 3,
-        title: "React for Beginners",
+        title: "Cars",
         description: "Learn the basics of React.",
-        image: "/imgs/react.svg",
+        image: "/imgs/carpreview.jpg",
     },
     {
         id: 4,
-        title: "Spring Boot Fundamentals",
+        title: "Landscapes",
         description: "Introduction to Spring Boot and REST APIs.",
-        image: "/imgs/vite.svg",
+        image: "/imgs/landscapespreview.jpg",
     }
 ];
 
@@ -59,30 +59,37 @@ const Home = ({userInfo}) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 w-3/4 mx-auto">
         {courses.map(course => (
-            <Link
+            <div
             key={course.id}
-            to={`/courses/${course.id}`}
-            className="h-[320px] rounded-lg shadow-lg overflow-hidden relative cursor-pointer block bg-[#FFF8D4] hover:shadow-2xl transition"
+            className="h-[320px] rounded-lg shadow-lg overflow-hidden relative block bg-[#FFF8D4] hover:shadow-2xl transition"
             >
             <div
                 className="absolute inset-0 bg-cover bg-center opacity-80"
                 style={{ backgroundImage: `url(${course.image})` }}
             />
             <div className="absolute bottom-0 w-full bg-white/70 backdrop-blur-sm p-4 rounded-b-lg">
-                <p className="font-bold text-lg text-[#313647] truncate">{course.title}</p>
-                <p className="text-sm text-[#A3B087] mt-1 line-clamp-2">{course.description}</p>
+              <div className="flex justify-between items-center">
+                <p className="font-bold text-lg text-textPrimary truncate">
+                  {course.title}
+                </p>
+
+                <a
+                  href={`/courses/${course.id}`}
+                  className="p-2 rounded-xl shadow-sm"
+                >
+                  <img
+                    src="/imgs/play-icon.png"
+                    alt="Play"
+                    className="w-6 h-6"
+                  />
+                </a>
+              </div>
             </div>
-            </Link>
+            </div>
         ))}
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="fixed bottom-0 left-0 w-full bg-[#A3B087] border-t-2 border-[#FFF8D4] z-50">
-        <div className="px-5 py-2.5 flex items-center justify-between">
-          {/* empty content */}
-        </div>
-      </div>
     </div>
   );
 };
