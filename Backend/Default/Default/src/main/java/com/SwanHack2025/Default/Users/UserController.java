@@ -1,0 +1,173 @@
+package com.SwanHack2025.Default.Users;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.SwanHack2025.Default.Helpers.UserHelper;
+import com.SwanHack2025.Default.Auth.LoginResponse;
+import com.SwanHack2025.Default.Auth.JwtUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("api/users")
+public class UserController {
+
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    // CREATE - Add's a new user
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            // Check if username already exists
+            if (userRepo.existsByUsername(user.getUsername())) {
+                return new ResponseEntity<>("Username already exists", HttpStatus.CONFLICT);
+            }
+
+            // Set default ELO
+            user.setElo(500);
+
+            // Save the new user
+            User newUser = userRepo.save(user);
+
+            // Generate JWT token
+            // Generate JWT token
+            String token = jwtUtil.generateToken(newUser.getId());
+
+            // Return LoginResponse
+            LoginResponse response = new LoginResponse(
+                    token,
+                    newUser.getId(),
+                    newUser.getUsername(),
+                    newUser.getEmail(),
+                    newUser.getElo()
+            );
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+    // READ - Get current user info
+    @GetMapping
+    public ResponseEntity<User> getUserById(@RequestHeader("Authorization") String authHeader) {
+        User user = UserHelper.getCurrentUser(authHeader);
+        Long id = user.getId();
+        Optional<User> userData = userRepo.findById(id);
+
+        if (userData.isPresent()) {
+            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    // READ - Get user by username
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+        Optional<User> userData = userRepo.findByUsername(username);
+        if (userData.isPresent()) {
+            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Read - Get Elo and Usernames of top 10 users
+    @GetMapping("/leaderboard")
+    public ResponseEntity<List<User>> GetLeaderBoard() {
+        return ResponseEntity.ok(userRepo.findTop10ByOrderByEloDesc());
+    }
+
+    // Read - Get user by username and password using request body
+    @PostMapping("/login")  // POST is preferred for sending credentials
+    public ResponseEntity<User> getUserByUsernameAndPassword(@RequestBody User loginUser) {
+        Optional<User> userData = userRepo.findByUsername(loginUser.getUsername());
+
+        if (userData.isPresent()) {
+            // Check password
+            if (userData.get().getPassword().equals(loginUser.getPassword())) {
+                return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+            } else {
+                System.out.println("Wrong password!!!");
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    // READ - Get user by email
+//    @GetMapping("/email/{email}")
+//    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
+//        Optional<User> userData = userRepo.findByUsername(email);
+//
+//        if (userData.isPresent()) {
+//            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+    // UPDATE - Update user by ID
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestHeader("Authorization") String authHeader, @RequestBody UserDTO propUser) {
+        User reqUser = UserHelper.getCurrentUser(authHeader);
+        Long id = reqUser.getId();
+        Optional<User> userData = userRepo.findById(id);
+
+        if (userData.isPresent()) {
+            User existingUser = userData.get();
+
+            if (Objects.equals(propUser.getPassword(), existingUser.getPassword()) && Objects.equals(propUser.getUsername(), existingUser.getUsername())) {
+                existingUser.setEmail((propUser.getProposedEmail()).isEmpty() ?
+                        existingUser.getEmail() : propUser.getProposedEmail());
+
+                existingUser.setUsername((propUser.getProposedUsername().isEmpty()) ?
+                        existingUser.getUsername() : propUser.getProposedUsername());
+
+                existingUser.setPassword((propUser.getPassword().isEmpty()) ?
+                        existingUser.getPassword() : propUser.getProposedPassword());
+
+            }
+
+            return new ResponseEntity<>(userRepo.save(existingUser), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // DELETE - Delete current users account
+    @DeleteMapping
+    public ResponseEntity<HttpStatus> deleteUser(@RequestHeader("Authorization") String authHeader, @RequestBody User user) {
+        User reqUser = UserHelper.getCurrentUser(authHeader);
+        Long id = reqUser.getId();
+
+        if (Objects.equals(user.getUsername(), reqUser.getUsername()) && Objects.equals(user.getPassword(), reqUser.getPassword())) {
+            try {
+                userRepo.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            System.out.println("username and provided username did not match: " +
+                    user.getUsername() + " did not provide the same password or user as " + reqUser.getUsername());
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+}

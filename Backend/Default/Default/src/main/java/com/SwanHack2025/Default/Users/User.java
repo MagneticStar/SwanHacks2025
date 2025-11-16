@@ -1,0 +1,83 @@
+package com.SwanHack2025.Default.Users;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private Integer elo = 500;
+
+    // Constructors
+    public User() {
+    }
+
+    public User(String username, String password,String email, int elo) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.elo = elo;
+    }
+
+    public User(String username, String password,String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        elo = 500;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {return email;}
+
+    public void setEmail(String email) {this.email = email;}
+
+    public Integer getElo() {
+        return elo;
+    }
+
+    public void setElo(Integer eloRanking) {
+        this.elo = eloRanking;
+    }
+}
