@@ -17,7 +17,12 @@ function App() {
 
   return (
     <Router>
-      <div className="flex-grow">
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        width: "100vw"
+      }}>
         <Routes>
           <Route path="/signup" element={<UserSignup user={user} setUser={setUser} />} />
           <Route path="/login" element={<UserLogin setUserInfo={setUser} />} />
