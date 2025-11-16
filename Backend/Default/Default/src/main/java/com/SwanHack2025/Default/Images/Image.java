@@ -1,0 +1,76 @@
+package com.SwanHack2025.Default.Images;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import com.SwanHack2025.Default.Courses.Course;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity
+@Table(name = "images")
+public class Image {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String path;
+
+    @Column(nullable = false)
+    private Integer imgElo = 500;
+
+    @Column(nullable = false)
+    private Boolean isAi;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    @JsonBackReference
+    private Course course;
+
+    // Constructors
+    public Image() {}
+
+    public Image(String path) {
+        this.path = path;
+        imgElo = 500;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getImgElo() {
+        return imgElo;
+    }
+
+    public void setImgElo(Integer imgElo) {
+        this.imgElo = imgElo;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Boolean getIsAi() { return isAi; }
+
+    public void setIsAi(Boolean isAi) {
+        this.isAi = isAi;
+    }
+}
