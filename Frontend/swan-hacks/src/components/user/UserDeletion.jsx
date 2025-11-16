@@ -7,9 +7,9 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Redirect if user is not logged in or name is empty
+  // Redirect if user not logged in
   useEffect(() => {
-    if (!userInfo || !userInfo.id || userInfo.name === "") {
+    if (!userInfo || !userInfo.id || userInfo.username === "") {
       navigate("/");
     }
   }, [userInfo, navigate]);
@@ -29,18 +29,28 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/delete-user", {
+      const res = await fetch("http://localhost:8080/api/users", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: form.username, password: form.password }),
+        body: JSON.stringify({
+          username: form.username,
+          password: form.password,
+        }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to delete account");
-      }
+      if (!res.ok) throw new Error("Delete failed");
+
+      // Clear user info
+      setUserInfo({
+        id: "",
+        name: "",
+        username: "",
+        email: "",
+        elo: "",
+      });
 
       setSuccess("Account deleted successfully 🤰");
-      setUserInfo({ id: "", name: "", username: "", elo: "" });
+
       setTimeout(() => navigate("/signup"), 1500);
     } catch (err) {
       console.error(err);
@@ -66,6 +76,7 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
             className="p-2 rounded border border-gray-300"
             required
           />
+
           <input
             type="password"
             name="password"
@@ -76,20 +87,20 @@ export default function DeleteUser({ userInfo, setUserInfo }) {
             required
           />
 
-          <div className="flex justify-between gap-4 mt-2">
-            {/* Delete button - warning color */}
+          <div className="flex w-full gap-4 mt-2">
+            {/* Delete button */}
             <button
               type="submit"
-              className="bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600 transition"
+              className="flex-1 bg-red-500 text-white font-bold py-2 rounded hover:bg-red-600 transition"
             >
               Delete Account
             </button>
-            
-            {/* Back button - navigates without submitting */}
+
+            {/* Back button */}
             <button
               type="button"
               onClick={() => navigate("/user-info")}
-              className="bg-[#A3B087] text-[#313647] font-bold py-2 px-4 rounded hover:bg-[#8c9a6d] transition"
+              className="flex-1 bg-[#A3B087] text-[#313647] font-bold py-2 rounded hover:bg-[#8c9a6d] transition"
             >
               Back
             </button>

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+// http://localhost:8080/api/auth/login POST
+// Required to call
+// keys: username + password (this is setUserInfo.name and forget about the password)
+// returns: all keys + token
+
 export default function UserLogin({ setUserInfo }) {
   const [form, setForm] = useState({
     username: "",

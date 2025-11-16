@@ -1,5 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 
+
 export default function UserInfo({ userInfo }) {
   if (!userInfo || !userInfo.id) {
     return <Navigate to="/login" replace />;

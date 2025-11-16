@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+// Path: http://localhost:8080/api/users  (POST)
+// Keys: username, password, email
+// returns: id => user.id
+
 export default function UserSignup({ user, setUser }) {
   const [answers, setAnswers] = useState({
     username: "",
@@ -74,6 +78,7 @@ export default function UserSignup({ user, setUser }) {
             required
             className="p-3 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#A3B087]"
           />
+
           <input
             type="email"
             name="email"
@@ -83,6 +88,7 @@ export default function UserSignup({ user, setUser }) {
             required
             className="p-3 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#A3B087]"
           />
+
           <input
             type="password"
             name="password"
@@ -105,10 +111,11 @@ export default function UserSignup({ user, setUser }) {
               className="p-3 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#A3B087]"
             />
 
-            {answers.confirmPassword && answers.password !== answers.confirmPassword && (
-              <div className="absolute -top-6 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded shadow-md">
-                Passwords do not match
-              </div>
+            {answers.confirmPassword &&
+              answers.password !== answers.confirmPassword && (
+                <div className="absolute -top-6 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded shadow-md">
+                  Passwords do not match
+                </div>
             )}
           </div>
 
